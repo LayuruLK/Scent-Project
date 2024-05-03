@@ -1,4 +1,5 @@
 console.log("Kola");
 //gggtgthththththjgjgj
-//hjhjhjhjjhjhj
-co
+//hjhjhjhjjhjh
+
+//hjhjhjhjh
