@@ -3,7 +3,7 @@ console.log("Kola");
 //hjhjhjhjjhjh
 
 //hjhjhjhjh
-
+console.log("FFFFFFFFF");
 hhgh
 
 //sjdhsjchdscfndskcv
