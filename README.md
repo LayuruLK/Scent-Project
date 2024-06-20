@@ -1,69 +1,112 @@
-# GPA Predictor
-This project is a GPA Predictor application built using **Python and Tkinter**. The application allows users to input various factors that might influence a student's GPA and predicts the GPA for the next semester based on a simple **linear regression** model.
+# GPA Predictor with Machine Learning (*Random Forest*)
+
+This project is a GPA Predictor application built using Python, Tkinter, and a Random Forest Regressor. The application predicts a student's GPA for the third semester based on various personal and academic factors.
+
 ## Features
-•	- Input fields for GPA of the first two semesters.
-•	- Options to input personal and academic factors such as commute status, economic status, part-time job, distance to campus, internet quality, attendance, social media usage, and long-term illness.
-•	- A "Predict GPA" button that calculates and displays the predicted GPA based on the provided inputs.
+
+- Input fields for GPA of the first two semesters and other influencing factors.
+- Uses a trained Random Forest Regressor model to predict the GPA.
+- GUI built with Tkinter for easy user interaction.
+
 ## Requirements
-•	- Python 3.x
-•	- Tkinter (comes pre-installed with Python)
+
+- Python 3.x
+- pandas
+- numpy
+- scikit-learn
+- tkinter (comes pre-installed with Python)
+
 ## Installation
-1.	- Clone the repository to your local machine:
+
+1. Clone the repository to your local machine:
+
+```sh
+https://github.com/Ravindu156/GPA_Predictor.git
+cd MachineLearning For Project
 ```
-git clone https://github.com/yourusername/gpa-predictor.git
-cd gpa-predictor
+
+2. Install the required libraries:
+
+```sh
+pip install pandas numpy scikit-learn
 ```
-2.	- Ensure you have Python 3.x installed on your system. If not, download and install it from [python.org]( https://www.python.org/).
-3.	- No additional libraries are required as Tkinter comes pre-installed with Python.
+
+3. Ensure you have Python 3.x installed on your system. If not, download and install it from [python.org](https://www.python.org/).
+
+4. Place the dataset file `form_dataset.csv` in the root directory of the project.
+
 ## Usage
-1.	- Navigate to the directory where the repository was cloned.
-2.	- Run the main.py file to start the application:
-`python main.py`
-3.	- Enter the required information in the provided fields and click on the "Predict GPA" button to get the predicted GPA for the next semester.
+
+1. Navigate to the directory where the repository was cloned.
+
+2. Run the `main.py` file to start the application:
+
+```sh
+python main.py
+```
+
+3. Enter the required information in the provided fields and click on the "Predict" button to get the predicted GPA for the third semester.
 
 ## Input Fields
-•	- **GPA of Semester 1**: Enter the GPA of the first semester.
-•	- **GPA of Semester 2**: Enter the GPA of the second semester.
-•	- **Are you coming to university from home?**: Select "Yes" or "No".
-•	- **Economic Status**: Select "Less than Rs.50000" or "Greater than Rs.50000".
-•	- **Part-time Job**: Select "No" or "Yes".
-•	- **Distance to Campus (km)**: Enter the distance to the campus in kilometers.
-•	- **Internet Quality**: Select "Bad" or "Good".
-•	- **Attendance**: Select "Less than 50%" or "Greater than 50%".
-•	- **Social Media Time Per Week (hours)**: Enter the number of hours spent on social media per week.
-•	- **Do you have a long-term illness?**: Select "No" or "Yes".
+
+- **GPA of Semester 1**: Enter the GPA of the first semester.
+- **GPA of Semester 2**: Enter the GPA of the second semester.
+- **Commutes From Home**: Select "Yes" or "No".
+- **Economic Status**: Select "Greater than Rs.50000" or "Less than Rs.50000".
+- **Part-Time Job**: Select "Yes" or "No".
+- **Distance to Campus (km)**: Enter the distance to the campus in kilometers.
+- **Internet Connection**: Select "Good" or "Bad".
+- **Attendance**: Select "Greater than 50%" or "Less than 50%".
+- **Time Spent on Social Media Per Week (hours)**: Enter the number of hours spent on social media per week.
+- **Long-Term Illness**: Select "Yes" or "No".
+
 ## Prediction Model
-The GPA prediction is based on a linear regression model with the following weights:
-•	-**w0 (Intercept)**: 2.5
-•	-**w1 (GPA of Semester 1)**: 0.25
-•	-**w2 (GPA of Semester 2)**: 0.25
-•	-**w3 (Commute Status)**: 0.1
-•	-**w4 (Economic Status)**: 0.1
-•	-**w5 (Part-time Job)**: -0.1
-•	-**w6 (Distance to Campus)**: -0.05
-•	-**w7 (Internet Quality)**: 0.1
-•	-**w8 (Attendance)**: 0.2
-•	-**w9 (Social Media Time)**: -0.05
-•	-**w10 (Long-term Illness)**: -0.2
-The predicted GPA is calculated using the formula:
+
+The GPA prediction is based on a Random Forest Regressor model trained on a dataset of student GPAs and influencing factors.
+
+### Model Training
+
+The dataset `form_dataset.csv` is used to train the model. The dataset is split into training and testing sets, and a Random Forest Regressor is trained on the training data. The model's performance is evaluated using Mean Squared Error (MSE).
+
+```python
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error
+
+# Load the dataset
+data = pd.read_csv('form_dataset.csv')
+
+# Train-test split
+X = data[['GPA_Sem1', 'GPA_Sem2', 'Commutes_From_Home', 'Economic_Status', 'Part_Time_Job', 
+          'Distance_to_Campus', 'Internet_Connection', 'Attendance', 'Social_Media_Time', 'Long_Term_Illness']]
+y = data['GPA_Sem3']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train the model
+model = RandomForestRegressor(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+
+# Calculate accuracy or performance metric
+predictions = model.predict(X_test)
+mse = mean_squared_error(y_test, predictions)
+print(f'Mean Squared Error: {mse}')
 ```
-predicted_gpa = (w0 + 
-                 w1 * gpa1 + 
-                 w2 * gpa2 + 
-                 w3 * commute + 
-                 w4 * eco_status + 
-                 w5 * part_time + 
-                 w6 * distance + 
-                 w7 * internet + 
-                 w8 * attendance + 
-                 w9 * social_media + 
-                 w10 * illness)
-```
-The predicted GPA is clamped to be between 0.0 and 4.0.
+
+### Prediction Function
+
+The function `predict_performance` gathers user inputs, preprocesses them, and uses the trained model to predict the GPA for the third semester. The predicted GPA is displayed in the GUI.
+
 ## Contributing
+
 Contributions are welcome! Please open an issue or submit a pull request with any improvements or new features.
+
 ## License
+
 This project is licensed under the MIT License. See the `LICENSE` file for more details.
+
 ## Contact
+
 For any questions or suggestions, please open an issue on the GitHub repository or contact the project maintainer.
 
+---
